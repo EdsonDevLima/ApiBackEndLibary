@@ -1,9 +1,9 @@
 import { Router } from "express";
-import UserController from "../Controllers/UserControllers";
+import AuthController from "../Controllers/UserControllers";
 
 const UsersRoutes = Router()
 
-UsersRoutes.post("/register",UserController.RegisterUser)
+UsersRoutes.post("/register",AuthController.RegisterUser)
 
 
 export default UsersRoutes

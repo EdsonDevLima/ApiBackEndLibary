@@ -1,10 +1,10 @@
 import { Request,Response,NextFunction } from "express"
 import GetToken from "./GetToken"
 import jwt from "jsonwebtoken"
+import UsersModel from "../Models/UsersModel"
 
 
-
-const verifyToken = (Req:Request,Res:Response,Next:NextFunction)=>{
+const verifyToken =async (Req:Request,Res:Response,Next:NextFunction)=>{
 
   const token = GetToken(Req)
   if(token == ""){
@@ -12,8 +12,12 @@ const verifyToken = (Req:Request,Res:Response,Next:NextFunction)=>{
      return
   }
   try{
-    const validation  =  jwt.verify(token,"minhaAssinaturacombrcombr")
-    if(validation){
+    const validation  =  jwt.verify(token,"minhaAssinaturacombrcombr") as {id:string,Email:string}
+    const id = validation.id
+    const Email = validation.Email
+    const user = await UsersModel.findOne({where:{email:Email,id:id}})
+    if(user !== null){
+      console.log(user)
       Next()
       return
     }
