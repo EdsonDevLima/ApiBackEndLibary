@@ -34,11 +34,13 @@ class AuthController{
       res.status(401).json({message:"Email ja esta sendo usado"})
       return 
     }
-    const PasswordSalt:string = await bcrypt.genSalt(10)
-    const PassowordHash:string = await bcrypt.hashSync(Password,PasswordSalt) 
-    const newUser = {UserName:UserName,Email:Email,PassowordHash:PassowordHash}
+
+
     
     try{
+    const PasswordSalt = await bcrypt.genSalt(12)
+    const PassowrdHash = await bcrypt.hash(Password,PasswordSalt) 
+    const newUser = {UserName:UserName,Email:Email,PasswordHash:PassowrdHash}      
       const nUser =  await UsersModel.create(newUser)
       const idUser = await nUser.getDataValue("id")
       const token:String = await createToken(idUser,newUser.Email)
@@ -67,13 +69,21 @@ class AuthController{
       Res.status(401).json({message:"Conta não encontrada"})
       return
     }
+  //  const dbpass = user.getDataValue("PasswordHash")
+  //  const validation = await bcrypt.compare(Password,dbpass)
+  //  if(!validation){
+  //    console.log(user.getDataValue("Password"))
+  //    Res.status(401).json({message:"Senha incorreta"})
+
+  //    return
+
+ //   }
+        console.log(user.getDataValue("PasswordHash"))
+        console.log(Password)
     try{
-      if(user){
         const token = await createToken(user.getDataValue("id"),user.getDataValue("Email"))
-        console.log(user.getDataValue("id"))
-        console.log(user.getDataValue("Email"))
         Res.status(201).json({message:"usuario logado",token:token})
-      }
+      
       
     }
     catch(err){
