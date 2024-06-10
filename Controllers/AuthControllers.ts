@@ -69,17 +69,13 @@ class AuthController{
       Res.status(401).json({message:"Conta não encontrada"})
       return
     }
-  //  const dbpass = user.getDataValue("PasswordHash")
-  //  const validation = await bcrypt.compare(Password,dbpass)
-  //  if(!validation){
-  //    console.log(user.getDataValue("Password"))
-  //    Res.status(401).json({message:"Senha incorreta"})
-
-  //    return
-
- //   }
-        console.log(user.getDataValue("PasswordHash"))
-        console.log(Password)
+     const dbpass = user.getDataValue("PasswordHash")
+     const validation = await bcrypt.compare(Password,dbpass)
+   if(!validation)
+    {
+     Res.status(401).json({message:"Senha incorreta"})
+       return
+    }
     try{
         const token = await createToken(user.getDataValue("id"),user.getDataValue("Email"))
         Res.status(201).json({message:"usuario logado",token:token})
