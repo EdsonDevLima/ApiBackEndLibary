@@ -1,5 +1,6 @@
 import ConnDb from "../Config/ConnDb";
 import {DataTypes} from "sequelize"
+import Category from "./Category";
 
 
 const Books = ConnDb.define("books",{
@@ -10,5 +11,11 @@ const Books = ConnDb.define("books",{
 
 })
 
+
+//relacionamentos
+//configurar tabela para receber uma chave estrangeira
+Category.hasOne(Books)
+//configurar tabela estrangeira para ficar ligada tabela principal
+Category.belongsTo(Category)
 
 export default Books

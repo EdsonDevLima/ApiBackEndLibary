@@ -33,6 +33,7 @@ class BooksController {
       
       
     }
+    static GetAllBooks(){}
     
 
 
