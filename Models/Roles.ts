@@ -1,6 +1,7 @@
 import ConnDb from "../Config/ConnDb"
 import { DataTypes } from "sequelize"
-const roles = ConnDb.define("roles",{name:DataTypes.STRING,role:DataTypes.NUMBER},)
+const roles = ConnDb.define("roles",{name:DataTypes.STRING,role:DataTypes.INTEGER},)
+
 
 
 

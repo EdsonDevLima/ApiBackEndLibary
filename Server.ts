@@ -2,7 +2,8 @@ import express from "express"
 import ConnDb from "./Config/ConnDb";
 import UsersRoutes from "./Routes/RouteUsers"
 import RoutesBooks from "./Routes/RouteBooks";
-import { createRoles } from "./Models/Roles";
+
+
 
 
 const app = express();
@@ -20,9 +21,9 @@ app.use("/books",RoutesBooks)
 ConnDb.sync()
 .then(()=>
   {
-    app.listen(3000,()=>
+    app.listen(3000, async()=>
       {
-        createRoles()
+
         console.log("servidor ligado")
 
   }

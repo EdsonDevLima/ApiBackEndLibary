@@ -14,8 +14,9 @@ const Books = ConnDb.define("books",{
 
 //relacionamentos
 //configurar tabela para receber uma chave estrangeira
-Category.hasOne(Books)
+Books.belongsTo(Category,{foreignKey:{name:"CategoryId",allowNull:false}})
 //configurar tabela estrangeira para ficar ligada tabela principal
-Category.belongsTo(Category)
+//uma categoria para muitos livros
+Category.hasMany(Books,{foreignKey:"CategoryId"})
 
 export default Books
