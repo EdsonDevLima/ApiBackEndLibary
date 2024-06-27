@@ -1,6 +1,7 @@
 import { Request,Response } from "express";
 import Books from "../Models/Books";
 import Category from "../Models/Category";
+import { where } from "sequelize";
 
 
 class BooksController {
@@ -29,11 +30,11 @@ class BooksController {
       }
       const verifyCategoryId = await Category.findOne({where:{id:Category}})
 
-      if(!verifyCategoryId){
-        Res.status(401).json({message:"categoria nao encontrada"})
-        return
-      }
-      const newBook = {Name,Author,amount,Image,CategoryId}
+//if(!verifyCategoryId){
+//        Res.status(401).json({message:"categoria nao encontrada"})
+//        return
+//      }
+      const newBook = {Name,Author,amount,Image,CategoryId:1}
       try{
        await Books.create(newBook)
        Res.status(200).json({message:"livro criado com sucesso"})
@@ -55,17 +56,32 @@ class BooksController {
         return
       }
     }
-    static async DeleteBook(Req:Request,Res:Response){
-      const {id} = Req.body
-      try{
-      await  Books.destroy({where:{id:id}})
-      Res.status(201).json({message:"livro excluido"})
-      return
-      }catch(err){
-        Res.status(500).json({message:err})
-        return 
+    static async DeleteBook(Req: Request, Res: Response) {
+      const { id } = Req.body;
+      
+      console.log('Requisição recebida:', Req.body); // Log para verificação
+  
+      // Verificação do corpo da requisição
+      if (!id) {
+          Res.status(400).json({ message: "ID é obrigatório" });
+          return;
       }
-    }
+  
+      try {
+          // Tentativa de deletar o livro
+          const result = await Books.destroy({ where: { id: id } });
+  
+          // Verificação se algum livro foi deletado
+          if (result === 0) {
+              Res.status(404).json({ message: "Livro não encontrado" });
+          } else {
+              Res.status(200).json({ message: "Livro excluído com sucesso" });
+          }
+      } catch (err) {
+          console.error('Erro ao excluir livro:', err); // Log de erro
+          Res.status(500).json({ message: "Erro no servidor", error: err });
+      }
+  }
     static async UpdateBook(Req:Request,Res:Response){
       const {Name,Author,amount,id} = Req.body
       const file = Req.file?.fieldname
@@ -86,6 +102,24 @@ class BooksController {
         Res.status(500).json({message:err})
         return 
       }
+    }
+    static async GetBookById(Req:Request,Res:Response){
+      const id = Req.params.id
+      if(!id){
+        Res.status(401).json({message:"id  do livro nao encontrado"})
+        return
+      }
+      try{
+        const book = await Books.findOne({where:{id:id}})
+        Res.status(401).json({message:"livro encontrado",book})
+        return
+
+      }catch(err){
+        Res.status(500).json({message:"error server",err})
+        return
+
+      }
+
     }
     
 }

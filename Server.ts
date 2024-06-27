@@ -5,6 +5,8 @@ import ConnDb from "./Config/ConnDb";
 import UsersRoutes from "./Routes/RouteUsers"
 import RoutesBooks from "./Routes/RouteBooks";
 import CategoryRoutes from "./Routes/RouteCategory";
+//packgers
+import Cors from "cors"
 
 
 
@@ -17,6 +19,15 @@ const app = express();
 //config de leitura de corpo da requisiçao
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
+
+
+app.use(Cors({
+  origin:"*",
+  methods:"GET,POST,PUT,DELETE,OPTIONS",
+  allowedHeaders:["Content-type","Authorization"],
+  credentials:true,
+  optionsSuccessStatus:200
+}))
 
 //rotas
 app.use("/auth",UsersRoutes)
