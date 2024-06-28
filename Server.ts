@@ -7,6 +7,7 @@ import RoutesBooks from "./Routes/RouteBooks";
 import CategoryRoutes from "./Routes/RouteCategory";
 //packgers
 import Cors from "cors"
+import RouterPublisher from "./Routes/RoutePublisher";
 
 
 
@@ -33,6 +34,7 @@ app.use(Cors({
 app.use("/auth",UsersRoutes)
 app.use("/books",RoutesBooks)
 app.use("/category",CategoryRoutes)
+app.use("/publisher",RouterPublisher)
 
 
 ConnDb.sync()

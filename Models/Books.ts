@@ -7,7 +7,9 @@ const Books = ConnDb.define("books",{
   Name:{type:DataTypes.STRING, allowNull:false },
   Image:{type:DataTypes.STRING, allowNull:false },
   Author:{type:DataTypes.STRING, allowNull:false },
-  amount:{type:DataTypes.INTEGER, allowNull:false }
+  Amount:{type:DataTypes.INTEGER, allowNull:false },
+  PriceUnit:{type:DataTypes.FLOAT,allowNull:false},
+  Publisher:{type:DataTypes.STRING,allowNull:false}
 
 })
 
