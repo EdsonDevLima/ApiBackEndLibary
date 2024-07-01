@@ -15,6 +15,30 @@ class PublisherController{
             return
         }
     }
+    static async CreatePublisher(Req:Request,Res:Response){
+        const {Name,Cnpj} = Req.body
+        console.log(Name,Cnpj)
+        if(!Name){
+            Res.status(401).json({message:"Nome obrigatorio"})
+            return
+        }
+        if(!Cnpj){
+            Res.status(401).json({message:"Cnpj obrigatorio"})
+            return
+        }
+        const newPublisher = {Name,Cnpj}
+        try
+        {
+            await Publisher.create(newPublisher)
+            Res.status(201).json({message:"Editora criada"})
+            return
+        }
+        catch(err)
+        {
+            Res.status(501).json({message:"Erro com o servidor",err})
+            return
+        }
+    }
 
 }
 

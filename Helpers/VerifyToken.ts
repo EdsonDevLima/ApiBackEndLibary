@@ -1,7 +1,7 @@
 import { Request,Response,NextFunction } from "express"
 import GetToken from "./GetToken"
 import jwt from "jsonwebtoken"
-import UsersModel from "../Models/UsersModel"
+import UsersModel from "../Models/Users"
 
 
 const verifyToken =async (Req:Request,Res:Response,Next:NextFunction)=>{

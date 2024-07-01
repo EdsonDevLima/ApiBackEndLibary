@@ -5,13 +5,13 @@ import Category from "../Models/Category"
 
 class CategoryController{
     static async CreateCategory(Req:Request,Res:Response){
-            const {CategoryName} = Req.body
-            if(!CategoryName){
+            const {Name} = Req.body
+            if(!Name){
                 Res.status(401).json({message:"nome da categoria obrigatoria"})
                 return
             }
             try{
-                await Category.create({Name:CategoryName})
+                await Category.create({Name:Name})
                 Res.status(201).json({message:"Categoria criada com sucesso"})
                 return
             }catch(err){

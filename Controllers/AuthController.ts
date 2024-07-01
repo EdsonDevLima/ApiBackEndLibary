@@ -2,6 +2,7 @@ import { Request,Response } from "express";
 import UsersModel from "../Models/Users"
 import bcrypt from "bcrypt"
 import createToken from "../Helpers/CreateToken";
+import jwt from "jsonwebtoken"
 
 
 
@@ -89,64 +90,29 @@ class AuthController{
 
 
   }
-  static async RegisterAdmin(Req:Request,Res:Response){
-    const {UserName,Email,Password,ConfirmPassword} = Req.body
-    if(UserName == "" ||UserName ==  null)
-     {
-       Res.status(401).json({message:"Usuario obrigatorio"})
-       return
-     }
-    if(Email == "" ||Email ==  null)
-     {
-       Res.status(401).json({message:"Email obrigatorio"})
-       return
-     }
-    if(Password == "" ||Password ==  null)
-     {
-       Res.status(401).json({message:"senha obrigatoria"})
-       return
-    }
-    if(ConfirmPassword == "" ||ConfirmPassword ==  null || Password != ConfirmPassword)
-     {
-       Res.status(401).json({message:"Confirmaçao senha obrigatoria"})
-       return
- 
-     }
-     const VerifyExists = await UsersModel.findOne({where:{Email:Email}})
-     if(VerifyExists){
-       Res.status(401).json({message:"Email ja esta sendo usado"})
-       return 
-     }
- 
- 
-     
-     try{
-     const PasswordSalt = await bcrypt.genSalt(12)
-     const PassowrdHash = await bcrypt.hash(Password,PasswordSalt) 
-     const newUser = {UserName:UserName,Email:Email,PasswordHash:PassowrdHash}      
-       const nUser =  await UsersModel.create(newUser)
-       const idUser = await nUser.getDataValue("id")
-       const token:String = await createToken(idUser,newUser.Email)
-       Res.status(201).json({message:"Usuario registrado com sucesso",token:token})
-     }catch(er){
-       Res.status(500).json({message:er})
-       return
-     }
- 
-   
- 
+  
+  static async getUser(Req:Request,Res:Response){
+      const {token} = Req.body
+      if(!token){
+        Res.status(401).json({message:"token nao encontrado"})
+        return
+      }
+      try{
+        const validation  =  jwt.verify(token,"minhaAssinaturacombrcombr") as {id:string,Email:string}
+        const id = validation.id
+        const Email = validation.Email
+        var userData = await UsersModel.findOne({where:{email:Email,id:id}})
+        if(userData !== null){
+          console.log(userData)
+          Res.status(200).json({message:"usuario encontrado",user:userData})
+        }
+        
+      }catch(err){
+        Res.status(402).json({message:"Erro ao verificar token",err})
+        return 
+      }
 
-
-
-
-
-
-
-
-
-
-
-
+      
   }
 }
 
