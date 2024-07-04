@@ -93,10 +93,12 @@ class AuthController{
   
   static async getUser(Req:Request,Res:Response){
       const {token} = Req.body
+      console.log(token)
       if(!token){
         Res.status(401).json({message:"token nao encontrado"})
         return
       }
+      
       try{
         const validation  =  jwt.verify(token,"minhaAssinaturacombrcombr") as {id:string,Email:string}
         const id = validation.id
