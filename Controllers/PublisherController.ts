@@ -17,7 +17,6 @@ class PublisherController{
     }
     static async CreatePublisher(Req:Request,Res:Response){
         const {Name,Cnpj} = Req.body
-        console.log(Name,Cnpj)
         if(!Name){
             Res.status(401).json({message:"Nome obrigatorio"})
             return

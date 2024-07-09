@@ -93,7 +93,6 @@ class AuthController{
   
   static async getUser(Req:Request,Res:Response){
       const {token} = Req.body
-      console.log(token)
       if(!token){
         Res.status(401).json({message:"token nao encontrado"})
         return
@@ -105,7 +104,6 @@ class AuthController{
         const Email = validation.Email
         var userData = await UsersModel.findOne({where:{email:Email,id:id}})
         if(userData !== null){
-          console.log(userData)
           Res.status(200).json({message:"usuario encontrado",user:userData})
         }
         
