@@ -11,11 +11,6 @@ class BooksController {
       const {Name,Author,Amount,PriceUnit,CategoryId,Publisher} = Req.body
       const Image = Req.file?.filename
 
-        if(!Req.file)
-        {
-          Res.status(401).json({message:"arquivos obrigatorios"})
-          return
-        }
         if(!Name)
         {
           Res.status(401).json({message:"nome obrigatorio"})
@@ -46,6 +41,11 @@ class BooksController {
           Res.status(401).json({message:"Preço unitario obrigatorio"})
           return
         }
+        if(!Req.file)
+          {
+            Res.status(401).json({message:"arquivos obrigatorios"})
+            return
+          }
 
       const verifyCategoryId = await Category.findOne({where:{id:CategoryId}})
   
@@ -139,14 +139,16 @@ class BooksController {
     }
     static async GetBookById(Req:Request,Res:Response){
       const id = Req.params.id
-      if(!id){
-        Res.status(401).json({message:"id  do livro nao encontrado"})
-        return
-      }
+
       try{
         const book = await Books.findOne({where:{id:id}})
-        Res.status(401).json({message:"livro encontrado",book})
+        if(!book){
+        Res.status(404).json({message:"livro nao encontrado"})
         return
+      }else{
+          Res.status(201).json({message:"livro nao encontrado",book}) 
+          return         
+        }
 
       }catch(err){
         Res.status(500).json({message:"error server",err})
